@@ -1,4 +1,4 @@
-// File: D:\SunwaySchool\app\page.tsx
+// File: D:\SunwaySchool\sunwayschoolmanagement\app\page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

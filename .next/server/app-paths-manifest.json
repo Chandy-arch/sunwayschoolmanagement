@@ -1,9 +1,9 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/page": "app/page.js",
   "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(dashboard)/parent/report-card/page": "app/(dashboard)/parent/report-card/page.js",
-  "/(dashboard)/parent/page": "app/(dashboard)/parent/page.js",
-  "/(dashboard)/parent/attendance/page": "app/(dashboard)/parent/attendance/page.js",
-  "/(dashboard)/parent/performance/page": "app/(dashboard)/parent/performance/page.js"
+  "/(dashboard)/admin/timetable/page": "app/(dashboard)/admin/timetable/page.js",
+  "/(dashboard)/admin/fees/page": "app/(dashboard)/admin/fees/page.js",
+  "/(dashboard)/admin/reports/page": "app/(dashboard)/admin/reports/page.js",
+  "/(dashboard)/admin/page": "app/(dashboard)/admin/page.js",
+  "/(dashboard)/parent/page": "app/(dashboard)/parent/page.js"
 }

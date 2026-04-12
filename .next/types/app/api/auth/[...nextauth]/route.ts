@@ -1,4 +1,4 @@
-// File: D:\SunwaySchool\app\api\auth\[...nextauth]\route.ts
+// File: D:\SunwaySchool\sunwayschoolmanagement\app\api\auth\[...nextauth]\route.ts
 import * as entry from '../../../../../../app/api/auth/[...nextauth]/route.js'
 import type { NextRequest } from 'next/server.js'
 

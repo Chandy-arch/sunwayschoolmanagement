@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { mockStudents, mockMarksRecords, mockAttendanceRecords, mockClasses } from "@/lib/mock-data";
 import { calculateGrade, getGradeColor, formatDate } from "@/lib/utils";
 import { Grade } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Printer, Download } from "lucide-react";
+import { Printer, Download, Loader2 } from "lucide-react";
 
 const myChild = mockStudents[0];
 const myClass = mockClasses.find(c => c._id === myChild.classId);
@@ -51,9 +51,43 @@ const remarks: Record<string, string> = {
 
 export default function ParentReportCardPage() {
   const printRef = useRef<HTMLDivElement>(null);
+  const [downloading, setDownloading] = useState(false);
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownload = async () => {
+    if (!printRef.current) return;
+    setDownloading(true);
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const jsPDF = (await import("jspdf")).default;
+      const canvas = await html2canvas(printRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgProps = pdf.getImageProperties(imgData);
+      const imgHeight = (imgProps.height * pageWidth) / imgProps.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+      pdf.addImage(imgData, "PNG", 0, position, pageWidth, imgHeight);
+      heightLeft -= pageHeight;
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, pageWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      pdf.save(`ReportCard_${myChild.name.replace(/\s+/g, "_")}.pdf`);
+    } finally {
+      setDownloading(false);
+    }
   };
 
   return (
@@ -63,8 +97,9 @@ export default function ParentReportCardPage() {
         <Button variant="default" onClick={handlePrint}>
           <Printer className="w-4 h-4 mr-2" /> Print Report Card
         </Button>
-        <Button variant="outline" onClick={handlePrint}>
-          <Download className="w-4 h-4 mr-2" /> Download PDF
+        <Button variant="outline" onClick={handleDownload} disabled={downloading}>
+          {downloading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
+          {downloading ? "Generating PDF…" : "Download PDF"}
         </Button>
       </div>
 

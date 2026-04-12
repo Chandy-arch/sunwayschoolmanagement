@@ -2,6 +2,8 @@
 
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
+import ChatWidget from "@/components/shared/ChatWidget";
+import { NotificationProvider } from "@/components/providers/NotificationContext";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -21,6 +23,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pageInfo = pageTitles[pathname] || { title: "Admin Portal", subtitle: "Sunway Global School" };
 
   return (
+    <NotificationProvider>
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       {/* Sidebar */}
       <div className="hidden lg:flex flex-shrink-0">
@@ -51,6 +54,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="p-6 animate-fade-in-up">{children}</div>
         </main>
       </div>
+      <ChatWidget />
     </div>
+    </NotificationProvider>
   );
 }

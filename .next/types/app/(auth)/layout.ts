@@ -1,4 +1,4 @@
-// File: D:\SunwaySchool\app\(auth)\layout.tsx
+// File: D:\SunwaySchool\sunwayschoolmanagement\app\(auth)\layout.tsx
 import * as entry from '../../../../app/(auth)/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

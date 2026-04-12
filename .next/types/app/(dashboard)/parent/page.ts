@@ -1,4 +1,4 @@
-// File: D:\SunwaySchool\app\(dashboard)\parent\page.tsx
+// File: D:\SunwaySchool\sunwayschoolmanagement\app\(dashboard)\parent\page.tsx
 import * as entry from '../../../../../app/(dashboard)/parent/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

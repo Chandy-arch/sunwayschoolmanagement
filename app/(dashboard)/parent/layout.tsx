@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
+import ChatWidget from "@/components/shared/ChatWidget";
+import { NotificationProvider } from "@/components/providers/NotificationContext";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 
@@ -32,6 +34,7 @@ export default function ParentLayout({ children }: { children: React.ReactNode }
   }
 
   return (
+    <NotificationProvider>
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <div className="hidden lg:flex">
@@ -60,6 +63,8 @@ export default function ParentLayout({ children }: { children: React.ReactNode }
           {children}
         </main>
       </div>
+      <ChatWidget />
     </div>
+    </NotificationProvider>
   );
 }
