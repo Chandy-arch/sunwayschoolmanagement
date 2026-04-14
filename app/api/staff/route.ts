@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
     const {
       name, email, phone, designation, department,
       subjects, classes, qualifications, experience,
-      salary, dateOfJoining, gender, address, createLoginAccount,
+      salary, dateOfJoining, gender, address, createLoginAccount, teacherType,
     } = body;
 
     // Validate required fields
@@ -129,6 +129,7 @@ export async function POST(req: NextRequest) {
       dateOfJoining,
       gender,
       address: address || "",
+      teacherType: teacherType || "class_teacher",
       userId,
       isActive: true,
     });

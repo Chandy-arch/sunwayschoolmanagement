@@ -39,6 +39,7 @@ const staffSchema = z.object({
   dateOfJoining: z.string().min(1, "Date of joining is required"),
   gender: z.enum(["Male", "Female", "Other"]),
   address: z.string().optional(),
+  teacherType: z.enum(["class_teacher", "subject_teacher"]).default("class_teacher"),
   createLoginAccount: z.boolean().optional(),
 });
 type StaffFormValues = z.infer<typeof staffSchema>;
@@ -96,7 +97,7 @@ export default function StaffManagementPage() {
 
   const addForm = useForm<StaffFormValues>({
     resolver: zodResolver(staffSchema),
-    defaultValues: { experience: 0, salary: 0, createLoginAccount: true, gender: "Male" },
+    defaultValues: { experience: 0, salary: 0, createLoginAccount: true, gender: "Male", teacherType: "class_teacher" },
   });
 
   const editForm = useForm<StaffFormValues>({ resolver: zodResolver(staffSchema) });
@@ -117,6 +118,7 @@ export default function StaffManagementPage() {
         dateOfJoining: editStaff.dateOfJoining,
         gender: editStaff.gender,
         address: editStaff.address,
+        teacherType: editStaff.teacherType || "class_teacher",
       });
     }
   }, [editStaff, editForm]);
@@ -135,6 +137,7 @@ export default function StaffManagementPage() {
     dateOfJoining: values.dateOfJoining,
     gender: values.gender,
     address: values.address || "",
+    teacherType: values.teacherType,
     createLoginAccount: values.createLoginAccount,
   });
 
@@ -517,7 +520,7 @@ export default function StaffManagementPage() {
         <DialogFooter>
           {addSuccess ? (
             <>
-              <Button variant="outline" onClick={() => { setAddSuccess(null); addForm.reset({ experience: 0, salary: 0, createLoginAccount: true, gender: "Male" }); }}>
+              <Button variant="outline" onClick={() => { setAddSuccess(null); addForm.reset({ experience: 0, salary: 0, createLoginAccount: true, gender: "Male", teacherType: "class_teacher" }); }}>
                 Add Another
               </Button>
               <Button onClick={() => setShowAddModal(false)}>Done</Button>
@@ -720,6 +723,7 @@ function StaffFormFields({
 
   const dateOfJoining = watch("dateOfJoining");
   const classesValue = watch("classesRaw") || "";
+  const teacherType = watch("teacherType");
   const selectedClasses = classesValue.split(",").map((s) => s.trim()).filter(Boolean);
 
   const toggleClass = (grade: string) => {
@@ -830,12 +834,65 @@ function StaffFormFields({
         </div>
       </div>
 
-      {/* Classes Handling */}
+      {/* Teacher Type */}
       <div>
         <div className="inline-flex items-center gap-1.5 bg-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full mb-4">
           <span className="w-1.5 h-1.5 bg-white rounded-full" />
-          Classes Handling
+          Teacher Type
         </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label
+            className={`flex items-start gap-3 px-4 py-3 rounded-xl border cursor-pointer transition-colors ${
+              teacherType === "class_teacher"
+                ? "bg-emerald-50 border-emerald-300 text-emerald-800"
+                : "border-gray-200 text-gray-600 hover:border-emerald-200"
+            }`}
+          >
+            <input
+              type="radio"
+              value="class_teacher"
+              {...register("teacherType")}
+              disabled={submitting}
+              className="mt-0.5 accent-emerald-600"
+            />
+            <div>
+              <p className="text-sm font-semibold">Class Teacher</p>
+              <p className="text-xs text-gray-500 mt-0.5">Owns a class, can mark attendance</p>
+            </div>
+          </label>
+          <label
+            className={`flex items-start gap-3 px-4 py-3 rounded-xl border cursor-pointer transition-colors ${
+              teacherType === "subject_teacher"
+                ? "bg-blue-50 border-blue-300 text-blue-800"
+                : "border-gray-200 text-gray-600 hover:border-blue-200"
+            }`}
+          >
+            <input
+              type="radio"
+              value="subject_teacher"
+              {...register("teacherType")}
+              disabled={submitting}
+              className="mt-0.5 accent-blue-600"
+            />
+            <div>
+              <p className="text-sm font-semibold">Subject Teacher</p>
+              <p className="text-xs text-gray-500 mt-0.5">Teaches subjects across classes, no attendance access</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      {/* Homeroom Class (Attendance Only) */}
+      <div>
+        <div className="inline-flex items-center gap-1.5 bg-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full mb-4">
+          <span className="w-1.5 h-1.5 bg-white rounded-full" />
+          Homeroom Class (Attendance Only)
+        </div>
+        {teacherType === "subject_teacher" ? (
+          <p className="text-sm text-gray-500 italic bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
+            Subject teachers are not assigned to a specific class.
+          </p>
+        ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {SCHOOL_GRADES.map((grade) => (
             <label
@@ -857,6 +914,7 @@ function StaffFormFields({
             </label>
           ))}
         </div>
+        )}
       </div>
 
       {showLoginOption && (

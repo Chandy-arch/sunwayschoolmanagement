@@ -1,15 +1,5 @@
 {
   "pages": {
-    "/api/auth/[...nextauth]/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/auth/[...nextauth]/route.js"
-    ],
-    "/api/events/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/events/route.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -31,6 +21,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(auth)/login/page.js"
     ],
+    "/api/auth/[...nextauth]/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/auth/[...nextauth]/route.js"
+    ],
     "/(dashboard)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -51,30 +46,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/staff/me/route.js"
     ],
-    "/(dashboard)/staff/calendar/page": [
+    "/(dashboard)/staff/classes/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/staff/calendar/page.js"
+      "static/chunks/app/(dashboard)/staff/classes/page.js"
     ],
-    "/(dashboard)/parent/layout": [
+    "/(dashboard)/staff/attendance/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/parent/layout.js"
+      "static/chunks/app/(dashboard)/staff/attendance/page.js"
     ],
-    "/(dashboard)/parent/page": [
+    "/api/attendance/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/parent/page.js"
+      "static/chunks/app/api/attendance/route.js"
     ],
-    "/api/parent/me/route": [
+    "/(dashboard)/staff/assignments/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/parent/me/route.js"
+      "static/chunks/app/(dashboard)/staff/assignments/page.js"
     ],
-    "/(dashboard)/parent/calendar/page": [
+    "/api/assignments/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/parent/calendar/page.js"
+      "static/chunks/app/api/assignments/route.js"
     ]
   }
 }

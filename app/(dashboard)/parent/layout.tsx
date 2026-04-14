@@ -13,6 +13,7 @@ const pageTitles: Record<string, { title: string; subtitle: string }> = {
   "/parent": { title: "Parent Dashboard", subtitle: "Overview of your child's progress" },
   "/parent/performance": { title: "Academic Performance", subtitle: "Marks and grades by subject" },
   "/parent/attendance": { title: "Attendance", subtitle: "Your child's attendance record" },
+  "/parent/homework": { title: "Homework", subtitle: "Assignments and due dates" },
   "/parent/report-card": { title: "Report Card", subtitle: "Official academic report" },
   "/parent/fees": { title: "Fee Management", subtitle: "Fee status and payments" },
   "/parent/messages": { title: "Messages", subtitle: "Communicate with teachers" },

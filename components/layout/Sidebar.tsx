@@ -30,6 +30,7 @@ const staffNavItems = [
   { label: "My Classes", href: "/staff/classes", icon: BookOpen },
   { label: "Attendance", href: "/staff/attendance", icon: ClipboardList },
   { label: "Marks Entry", href: "/staff/marks", icon: Award },
+  { label: "Assignments", href: "/staff/assignments", icon: Book },
   { label: "Calendar", href: "/staff/calendar", icon: Calendar },
   { label: "Communication", href: "/staff/communication", icon: MessageSquare },
 ];
@@ -38,6 +39,7 @@ const parentNavItems = [
   { label: "Dashboard", href: "/parent", icon: Home },
   { label: "Performance", href: "/parent/performance", icon: BarChart3 },
   { label: "Attendance", href: "/parent/attendance", icon: Calendar },
+  { label: "Homework", href: "/parent/homework", icon: ClipboardList },
   { label: "Report Card", href: "/parent/report-card", icon: FileText },
   { label: "Fee Payment", href: "/parent/fees", icon: DollarSign },
   { label: "Calendar", href: "/parent/calendar", icon: Calendar },
@@ -70,13 +72,17 @@ const roleConfig = {
 
 interface SidebarProps {
   role: "admin" | "staff" | "parent";
+  hiddenNavItems?: string[];
 }
 
-export default function Sidebar({ role }: SidebarProps) {
+export default function Sidebar({ role, hiddenNavItems = [] }: SidebarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const [collapsed, setCollapsed] = useState(false);
   const config = roleConfig[role];
+  const navItems = hiddenNavItems.length
+    ? config.items.filter((item) => !hiddenNavItems.includes(item.href))
+    : config.items;
 
   return (
     <div
@@ -130,7 +136,7 @@ export default function Sidebar({ role }: SidebarProps) {
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-2 py-2 space-y-1">
-        {config.items.map((item) => {
+        {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link

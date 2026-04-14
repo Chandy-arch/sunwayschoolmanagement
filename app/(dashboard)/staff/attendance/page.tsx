@@ -38,6 +38,7 @@ export default function StaffAttendancePage() {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingAtt, setLoadingAtt] = useState(false);
+  const [isSubjectTeacher, setIsSubjectTeacher] = useState(false);
 
   // Load staff profile + classes
   useEffect(() => {
@@ -46,6 +47,11 @@ export default function StaffAttendancePage() {
         const res = await fetch("/api/staff/me", { cache: "no-store" });
         const json = await res.json();
         if (json.success) {
+          if (json.data.profile?.teacherType === "subject_teacher") {
+            setIsSubjectTeacher(true);
+            setLoading(false);
+            return;
+          }
           setClasses(json.data.classSummary);
           setStudents(json.data.students);
           if (json.data.classSummary.length > 0) {
@@ -165,6 +171,23 @@ export default function StaffAttendancePage() {
     return (
       <div className="flex items-center justify-center h-64 text-gray-400">
         <Loader2 className="w-6 h-6 animate-spin mr-2" /> Loading...
+      </div>
+    );
+  }
+
+  if (isSubjectTeacher) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4 text-center">
+        <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
+          <X className="w-7 h-7 text-blue-500" />
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">Attendance Not Available</h3>
+          <p className="text-sm text-gray-500 mt-1 max-w-sm">
+            As a subject teacher, you are not assigned to a class and cannot mark attendance.
+            Only class teachers have access to this feature.
+          </p>
+        </div>
       </div>
     );
   }

@@ -16,6 +16,7 @@ export interface IStaff extends Document {
   gender: "Male" | "Female" | "Other";
   address: string;
   photo?: string;
+  teacherType: "class_teacher" | "subject_teacher";
   userId?: mongoose.Types.ObjectId; // linked User account for login
   isActive: boolean;
   createdAt: Date;
@@ -39,6 +40,7 @@ const StaffSchema = new Schema<IStaff>(
     gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
     address: { type: String, trim: true, default: "" },
     photo: { type: String },
+    teacherType: { type: String, enum: ["class_teacher", "subject_teacher"], default: "class_teacher" },
     userId: { type: Schema.Types.ObjectId, ref: "User" },
     isActive: { type: Boolean, default: true },
   },

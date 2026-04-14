@@ -28,6 +28,7 @@ export interface StaffFormData {
   dateOfJoining: string;
   gender: "Male" | "Female" | "Other";
   address: string;
+  teacherType?: "class_teacher" | "subject_teacher";
   createLoginAccount?: boolean;
 }
 
