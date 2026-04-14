@@ -51,5 +51,8 @@ const StudentSchema = new Schema<IStudent>(
 
 StudentSchema.index({ classId: 1, section: 1 });
 StudentSchema.index({ parentId: 1 });
+StudentSchema.index({ isActive: 1 });
+StudentSchema.index({ admissionNumber: 1 }, { unique: true, sparse: true });
+StudentSchema.index({ name: "text", studentId: "text", admissionNumber: "text" });
 
 export default mongoose.models.Student || mongoose.model<IStudent>("Student", StudentSchema);

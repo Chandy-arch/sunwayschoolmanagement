@@ -70,6 +70,8 @@ export interface Staff {
   gender: Gender;
   address: string;
   photo?: string;
+  userId?: string;
+  hasLoginAccount?: boolean;
   isActive: boolean;
   createdAt: string;
 }
@@ -144,6 +146,14 @@ export interface FeeRecord {
   receiptNumber?: string;
   paymentMethod?: string;
   remarks?: string;
+}
+
+export interface Fee extends FeeRecord {
+  studentName: string;
+  className: string;
+  section: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface TimetableSlot {

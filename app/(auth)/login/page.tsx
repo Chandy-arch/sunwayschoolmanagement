@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import Image from "next/image";
 import {
-  GraduationCap, Eye, EyeOff, Lock, Mail, Shield,
+  Eye, EyeOff, Lock, Mail, Shield,
   Users, UserCheck, ChevronRight,
 } from "lucide-react";
 
@@ -79,8 +80,13 @@ export default function LoginPage() {
       if (result?.error) {
         setError("Invalid email or password. Please try again.");
       } else {
-        if (data.email.startsWith("admin")) router.push("/admin");
-        else if (data.email.startsWith("staff")) router.push("/staff");
+        // Fetch session to get the actual role
+        const { getSession } = await import("next-auth/react");
+        const sess = await getSession();
+        const role = (sess?.user as { role?: string })?.role;
+        if (role === "admin") router.push("/admin");
+        else if (role === "staff") router.push("/staff");
+        else if (role === "parent") router.push("/parent");
         else router.push("/parent");
       }
     } catch {
@@ -116,8 +122,8 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md">
         {/* Logo & School Name */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-sky-500 to-blue-700 rounded-2xl shadow-xl mb-4 shadow-sky-200">
-            <GraduationCap className="w-8 h-8 text-white" />
+          <div className="inline-flex items-center justify-center mb-4">
+            <Image src="/logo.png" alt="Sunway Global School" width={90} height={90} priority />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Sunway Global School</h1>
           <p className="text-sm text-gray-500 mt-1">School Management System</p>

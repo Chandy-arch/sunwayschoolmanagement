@@ -6,6 +6,8 @@ import ChatWidget from "@/components/shared/ChatWidget";
 import { NotificationProvider } from "@/components/providers/NotificationContext";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const pageTitles: Record<string, { title: string; subtitle: string }> = {
   "/staff": { title: "Staff Dashboard", subtitle: "Welcome to your teaching portal" },
@@ -18,7 +20,20 @@ const pageTitles: Record<string, { title: string; subtitle: string }> = {
 export default function StaffLayout({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const { data: session, status } = useSession();
   const pageInfo = pageTitles[pathname] || { title: "Staff Portal", subtitle: "Sunway Global School" };
+
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  if (!session || (session.user as { role?: string })?.role !== "staff") {
+    redirect("/login");
+  }
 
   return (
     <NotificationProvider>

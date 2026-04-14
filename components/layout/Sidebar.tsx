@@ -11,6 +11,7 @@ import {
   ClipboardList, FileText, Clock, PlusCircle, Home, Award, ChevronLeft,
   ChevronRight, Shield, Book
 } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
 const adminNavItems = [
@@ -97,8 +98,8 @@ export default function Sidebar({ role }: SidebarProps) {
       {/* Logo */}
       <div className="p-4 border-b border-white/10">
         <Link href={`/${role}`} className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-white/15 backdrop-blur rounded-xl flex items-center justify-center border border-white/20 flex-shrink-0">
-            <GraduationCap className="w-5 h-5 text-white" />
+          <div className="w-9 h-9 flex-shrink-0">
+            <Image src="/logo.png" alt="Sunway" width={36} height={36} className="w-9 h-9 object-contain" />
           </div>
           {!collapsed && (
             <div>

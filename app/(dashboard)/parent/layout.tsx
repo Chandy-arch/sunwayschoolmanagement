@@ -33,6 +33,10 @@ export default function ParentLayout({ children }: { children: React.ReactNode }
     );
   }
 
+  if (!session || (session.user as { role?: string })?.role !== "parent") {
+    redirect("/login");
+  }
+
   return (
     <NotificationProvider>
     <div className="min-h-screen bg-gray-50 flex">
