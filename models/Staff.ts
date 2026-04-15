@@ -9,6 +9,7 @@ export interface IStaff extends Document {
   department: string;
   subjects: string[];
   classes: string[];
+  classTeacher?: string; // class this staff is the class teacher of
   qualifications: string;
   experience: number;
   salary: number;
@@ -33,6 +34,7 @@ const StaffSchema = new Schema<IStaff>(
     department: { type: String, required: true, trim: true },
     subjects: [{ type: String, trim: true }],
     classes: [{ type: String, trim: true }],
+    classTeacher: { type: String, trim: true, default: "" },
     qualifications: { type: String, trim: true, default: "" },
     experience: { type: Number, required: true, min: 0 },
     salary: { type: Number, required: true, min: 0 },
@@ -51,4 +53,9 @@ StaffSchema.index({ department: 1 });
 StaffSchema.index({ designation: 1 });
 StaffSchema.index({ isActive: 1 });
 
-export default mongoose.models.Staff || mongoose.model<IStaff>("Staff", StaffSchema);
+// Delete cached model in development so schema changes are always picked up
+if (process.env.NODE_ENV === "development") {
+  delete (mongoose.models as Record<string, unknown>).Staff;
+}
+
+export default mongoose.model<IStaff>("Staff", StaffSchema);

@@ -4,7 +4,6 @@ import { authOptions } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import StaffModel from "@/models/Staff";
 import User from "@/models/User";
-import bcrypt from "bcryptjs";
 
 // GET /api/staff — list with search, department filter, pagination
 export async function GET(req: NextRequest) {
@@ -74,7 +73,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const {
       name, email, phone, designation, department,
-      subjects, classes, qualifications, experience,
+      subjects, classes, classTeacher, qualifications, experience,
       salary, dateOfJoining, gender, address, createLoginAccount, teacherType,
     } = body;
 
@@ -96,16 +95,16 @@ export async function POST(req: NextRequest) {
 
     // Optionally create a User login account
     let userId: string | undefined;
+    let defaultPassword: string | undefined;
     if (createLoginAccount) {
       const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
       if (!existingUser) {
-        const defaultPassword = `${name.split(" ")[0].toLowerCase()}@${year}`;
-        const salt = await bcrypt.genSalt(12);
-        const hashed = await bcrypt.hash(defaultPassword, salt);
+        defaultPassword = `${name.split(" ")[0].toLowerCase()}@${year}`;
+        // Do NOT manually hash — the User model pre-save hook handles hashing
         const user = await User.create({
           name,
           email: email.toLowerCase().trim(),
-          password: hashed,
+          password: defaultPassword,
           role: "staff",
           phone,
           isActive: true,
@@ -123,6 +122,7 @@ export async function POST(req: NextRequest) {
       department: department.trim(),
       subjects: subjects || [],
       classes: classes || [],
+      classTeacher: classTeacher || "",
       qualifications: qualifications || "",
       experience: Number(experience) || 0,
       salary: Number(salary) || 0,
@@ -134,7 +134,15 @@ export async function POST(req: NextRequest) {
       isActive: true,
     });
 
-    return NextResponse.json({ success: true, data: staff, staffId }, { status: 201 });
+    return NextResponse.json({
+      success: true,
+      data: staff,
+      staffId,
+      // Only returned once at creation — never stored in plaintext after this
+      credentials: createLoginAccount && defaultPassword
+        ? { email: email.toLowerCase().trim(), password: defaultPassword }
+        : null,
+    }, { status: 201 });
   } catch (error) {
     console.error("POST /api/staff error:", error);
     return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });

@@ -22,6 +22,7 @@ export interface StaffFormData {
   department: string;
   subjects: string[];
   classes: string[];
+  classTeacher?: string;
   qualifications: string;
   experience: number;
   salary: number;
@@ -65,13 +66,13 @@ export const staffService = {
     return json.data;
   },
 
-  async create(data: StaffFormData): Promise<{ data: Staff; staffId: string }> {
+  async create(data: StaffFormData): Promise<{ data: Staff; staffId: string; credentials: { email: string; password: string } | null }> {
     const res = await fetch("/api/staff", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    return handleResponse<{ success: boolean; data: Staff; staffId: string }>(res);
+    return handleResponse<{ success: boolean; data: Staff; staffId: string; credentials: { email: string; password: string } | null }>(res);
   },
 
   async update(id: string, data: Partial<StaffFormData>): Promise<Staff> {

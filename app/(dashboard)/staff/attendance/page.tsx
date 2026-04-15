@@ -13,6 +13,7 @@ interface ClassInfo {
   className: string;
   section: string;
   studentCount: number;
+  isClassTeacher: boolean;
 }
 
 interface StudentInfo {
@@ -196,7 +197,7 @@ export default function StaffAttendancePage() {
     <div className="space-y-5">
       {/* Header controls */}
       <div className="flex flex-wrap gap-3 items-center">
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {classes.map((cls) => (
             <button
               key={cls.name}
@@ -205,13 +206,18 @@ export default function StaffAttendancePage() {
                 setAttendance({});
                 setSaved(false);
               }}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+              className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
                 selectedClass?.name === cls.name
                   ? "bg-emerald-600 text-white shadow"
                   : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
               }`}
             >
               {cls.name}
+              {cls.isClassTeacher && (
+                <span className="absolute -top-1.5 -right-1.5 bg-amber-400 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                  CT
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -227,6 +233,15 @@ export default function StaffAttendancePage() {
           className="ml-auto px-3 py-2 rounded-xl border border-gray-200 text-sm"
         />
       </div>
+
+      {/* View-only banner for non-class-teacher classes */}
+      {selectedClass && !selectedClass.isClassTeacher && (
+        <div className="flex items-center gap-2 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-700 font-medium">
+          <span className="text-base">👁</span>
+          You are viewing attendance for <span className="font-bold mx-1">{selectedClass.name}</span> in read-only mode.
+          Only the assigned class teacher can mark attendance for this class.
+        </div>
+      )}
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         {/* Student List */}
@@ -246,28 +261,30 @@ export default function StaffAttendancePage() {
             ))}
           </div>
 
-          {/* Bulk Actions */}
-          <div className="flex gap-2 flex-wrap">
-            <Button size="sm" variant="success" onClick={() => markAll("Present")}>
-              <CheckCheck className="w-3.5 h-3.5 mr-1.5" /> Mark All Present
-            </Button>
-            <Button size="sm" variant="destructive" onClick={() => markAll("Absent")}>
-              <X className="w-3.5 h-3.5 mr-1.5" /> Mark All Absent
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => { setAttendance({}); fetchAttendance(); }}>
-              <RotateCcw className="w-3.5 h-3.5 mr-1.5" /> Reset
-            </Button>
-            <Button
-              size="sm"
-              variant="default"
-              onClick={handleSave}
-              disabled={saving || classStudents.length === 0}
-              className="ml-auto gap-1.5"
-            >
-              {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-              Save Attendance
-            </Button>
-          </div>
+          {/* Bulk Actions — only shown for class teacher */}
+          {selectedClass?.isClassTeacher && (
+            <div className="flex gap-2 flex-wrap">
+              <Button size="sm" variant="success" onClick={() => markAll("Present")}>
+                <CheckCheck className="w-3.5 h-3.5 mr-1.5" /> Mark All Present
+              </Button>
+              <Button size="sm" variant="destructive" onClick={() => markAll("Absent")}>
+                <X className="w-3.5 h-3.5 mr-1.5" /> Mark All Absent
+              </Button>
+              <Button size="sm" variant="outline" onClick={() => { setAttendance({}); fetchAttendance(); }}>
+                <RotateCcw className="w-3.5 h-3.5 mr-1.5" /> Reset
+              </Button>
+              <Button
+                size="sm"
+                variant="default"
+                onClick={handleSave}
+                disabled={saving || classStudents.length === 0}
+                className="ml-auto gap-1.5"
+              >
+                {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                Save Attendance
+              </Button>
+            </div>
+          )}
 
           {saved && (
             <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-2">
@@ -280,6 +297,11 @@ export default function StaffAttendancePage() {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm">
                 {selectedClass?.name} — {selectedDate}
+                {selectedClass?.isClassTeacher && (
+                  <span className="ml-2 text-xs font-normal bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+                    Class Teacher
+                  </span>
+                )}
                 {loadingAtt && <Loader2 className="w-3.5 h-3.5 animate-spin inline ml-2" />}
               </CardTitle>
             </CardHeader>
@@ -289,6 +311,7 @@ export default function StaffAttendancePage() {
               ) : (
                 classStudents.map((student, i) => {
                   const status = getStatus(student._id);
+                  const isEditable = !!selectedClass?.isClassTeacher;
                   return (
                     <div key={student._id} className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 group">
                       <Avatar name={student.name} size="sm" colorIndex={i % 8} />
@@ -311,8 +334,9 @@ export default function StaffAttendancePage() {
                           return (
                             <button
                               key={s}
-                              onClick={() => setStatus(student._id, s)}
-                              className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all ${styles[s]} ${status === s ? activeStyles[s] : ""}`}
+                              onClick={() => isEditable && setStatus(student._id, s)}
+                              disabled={!isEditable}
+                              className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all ${styles[s]} ${status === s ? activeStyles[s] : ""} ${!isEditable ? "opacity-60 cursor-not-allowed" : ""}`}
                             >
                               {s === "Present" ? "P" : s === "Absent" ? "A" : "L"}
                             </button>

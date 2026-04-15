@@ -33,6 +33,7 @@ const staffSchema = z.object({
   department: z.string().min(2, "Department is required"),
   subjectsRaw: z.string().optional(),
   classesRaw: z.string().optional(),
+  classTeacher: z.string().optional(),
   qualifications: z.string().optional(),
   experience: z.coerce.number().min(0, "Experience cannot be negative"),
   salary: z.coerce.number().min(0, "Salary cannot be negative"),
@@ -63,7 +64,7 @@ export default function StaffManagementPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
-  const [addSuccess, setAddSuccess] = useState<{ staffId: string; name: string } | null>(null);
+  const [addSuccess, setAddSuccess] = useState<{ staffId: string; name: string; credentials: { email: string; password: string } | null } | null>(null);
 
   // Account management
   const [accountCredentials, setAccountCredentials] = useState<AccountCredentials | null>(null);
@@ -112,6 +113,7 @@ export default function StaffManagementPage() {
         department: editStaff.department,
         subjectsRaw: editStaff.subjects.join(", "),
         classesRaw: editStaff.classes.join(", "),
+        classTeacher: editStaff.classTeacher || "",
         qualifications: editStaff.qualifications,
         experience: editStaff.experience,
         salary: editStaff.salary,
@@ -131,6 +133,7 @@ export default function StaffManagementPage() {
     department: values.department,
     subjects: values.subjectsRaw ? values.subjectsRaw.split(",").map((s) => s.trim()).filter(Boolean) : [],
     classes: values.classesRaw ? values.classesRaw.split(",").map((s) => s.trim()).filter(Boolean) : [],
+    classTeacher: values.classTeacher || "",
     qualifications: values.qualifications || "",
     experience: values.experience,
     salary: values.salary,
@@ -146,7 +149,7 @@ export default function StaffManagementPage() {
     setFormError(null);
     try {
       const result = await staffService.create(parseFormData(values));
-      setAddSuccess({ staffId: result.staffId, name: values.name });
+      setAddSuccess({ staffId: result.staffId, name: values.name, credentials: result.credentials });
       addForm.reset();
       await fetchStaff();
     } catch (err) {
@@ -456,6 +459,7 @@ export default function StaffManagementPage() {
                 { label: "Experience", value: `${viewStaff.experience} years`, icon: Award },
                 { label: "Joining Date", value: formatDate(viewStaff.dateOfJoining), icon: Award },
                 { label: "Gender", value: viewStaff.gender, icon: Users },
+                { label: "Class Teacher of", value: viewStaff.classTeacher || "Not assigned", icon: BookOpen },
               ].map((item) => (
                 <div key={item.label} className="flex items-start gap-2">
                   <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -506,6 +510,43 @@ export default function StaffManagementPage() {
                 <p className="text-xs text-gray-500 mb-1">Staff ID</p>
                 <p className="text-xl font-mono font-bold text-indigo-600">{addSuccess.staffId}</p>
               </div>
+
+              {/* One-time credentials display */}
+              {addSuccess.credentials && (
+                <div className="w-full space-y-3 text-left">
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
+                    <p className="text-xs font-semibold text-amber-700">
+                      ⚠ This password will only be shown once. Copy and share it with the staff member.
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 rounded-xl p-3 flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-xs text-gray-500 mb-0.5">Login Email</p>
+                      <p className="text-sm font-mono font-semibold text-gray-900">{addSuccess.credentials.email}</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => copyToClipboard(addSuccess.credentials!.email, "email")}
+                    >
+                      {copiedField === "email" ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                  <div className="bg-gray-50 rounded-xl p-3 flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-xs text-gray-500 mb-0.5">Password</p>
+                      <p className="text-sm font-mono font-semibold text-gray-900">{addSuccess.credentials.password}</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => copyToClipboard(addSuccess.credentials!.password, "password")}
+                    >
+                      {copiedField === "password" ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <StaffFormFields
@@ -724,6 +765,7 @@ function StaffFormFields({
   const dateOfJoining = watch("dateOfJoining");
   const classesValue = watch("classesRaw") || "";
   const teacherType = watch("teacherType");
+  const classTeacher = watch("classTeacher") || "";
   const selectedClasses = classesValue.split(",").map((s) => s.trim()).filter(Boolean);
 
   const toggleClass = (grade: string) => {
@@ -915,6 +957,44 @@ function StaffFormFields({
           ))}
         </div>
         )}
+      </div>
+
+      {/* Class Teacher Assignment */}
+      <div>
+        <div className="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-xs font-semibold px-3 py-1 rounded-full mb-4">
+          <span className="w-1.5 h-1.5 bg-white rounded-full" />
+          Class Teacher Assignment
+        </div>
+        <div>
+          <label className="text-xs font-medium text-gray-600 block mb-1">
+            Class Teacher of <span className="text-gray-400">(optional)</span>
+          </label>
+          <select
+            {...register("classTeacher")}
+            disabled={submitting}
+            className="w-full h-10 px-3 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="">— Not a class teacher —</option>
+            {selectedClasses.length > 0
+              ? selectedClasses.map((cls) => (
+                  <option key={cls} value={cls}>{cls}</option>
+                ))
+              : SCHOOL_GRADES.map((grade) => (
+                  <option key={grade} value={grade}>{grade}</option>
+                ))
+            }
+          </select>
+          {classTeacher && (
+            <p className="text-xs text-emerald-600 mt-1 font-medium">
+              ✓ This teacher will be able to mark attendance for {classTeacher}. Other classes will be view-only.
+            </p>
+          )}
+          {!classTeacher && (
+            <p className="text-xs text-gray-400 mt-1">
+              If not assigned as class teacher, this staff member can only view attendance for all classes.
+            </p>
+          )}
+        </div>
       </div>
 
       {showLoginOption && (

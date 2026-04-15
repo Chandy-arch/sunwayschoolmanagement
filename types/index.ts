@@ -64,6 +64,7 @@ export interface Staff {
   department: string;
   subjects: string[];
   classes: string[];
+  classTeacher?: string;
   qualifications: string;
   experience: number;
   salary: number;

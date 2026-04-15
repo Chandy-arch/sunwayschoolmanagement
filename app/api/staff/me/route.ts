@@ -79,17 +79,25 @@ export async function GET() {
       : 0;
 
     // Build class summary
+    // A teacher is class teacher of a class if:
+    // 1. classTeacher field explicitly matches, OR
+    // 2. classTeacher is unset/empty AND they only handle one class (backward-compat fallback)
+    const isSingleClass = staff.classes.length === 1;
     const classSummary = staff.classes.map((cls: string) => {
       const section = getSectionFromGrade(cls);
       const classStudents = students.filter(
         (s) => s.className === cls && s.section === section
       );
+      const isClassTeacher =
+        (staff.classTeacher && staff.classTeacher === cls) ||
+        (!staff.classTeacher && isSingleClass);
       return {
         name: cls,
         className: cls,
         section,
         studentCount: classStudents.length,
         subjects: staff.subjects,
+        isClassTeacher: !!isClassTeacher,
       };
     });
 
@@ -106,6 +114,7 @@ export async function GET() {
           department: staff.department,
           subjects: staff.subjects,
           classes: staff.classes,
+          classTeacher: staff.classTeacher || "",
           qualifications: staff.qualifications,
           experience: staff.experience,
           gender: staff.gender,
