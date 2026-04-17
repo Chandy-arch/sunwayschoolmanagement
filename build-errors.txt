@@ -1,0 +1,39 @@
+﻿
+> praba-school-management-system@1.0.0 build
+> next build
+
+   Γû▓ Next.js 15.5.15
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 6.3s
+   Linting and checking validity of types ...
+npm : Failed to compile.
+At line:1 char:1
++ npm run build 2>&1 | Out-File -FilePath build-errors.txt -Encoding ut ...
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Failed to compile.:String) [], Re 
+   moteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+./app/(dashboard)/admin/reports/page.tsx:320:21
+Type error: Property 'name' is missing in type '{ month: string; current: 
+number; previous: number; }' but required in type 'ChartData'.
+
+[0m [90m 318 |[39m                 [33m<[39m[33mLineChartComponent[39m
+ [90m 319 |[39m                   data[33m=[39m{[
+[31m[1m>[22m[39m[90m 320 |[39m                     { month[33m:[39m 
+[32m"Jun"[39m[33m,[39m current[33m:[39m [35m380[39m[33m,[39m 
+previous[33m:[39m [35m340[39m }[33m,[39m
+ [90m     |[39m                     [31m[1m^[22m[39m
+ [90m 321 |[39m                     { month[33m:[39m 
+[32m"Jul"[39m[33m,[39m current[33m:[39m [35m395[39m[33m,[39m 
+previous[33m:[39m [35m355[39m }[33m,[39m
+ [90m 322 |[39m                     { month[33m:[39m 
+[32m"Aug"[39m[33m,[39m current[33m:[39m [35m398[39m[33m,[39m 
+previous[33m:[39m [35m362[39m }[33m,[39m
+ [90m 323 |[39m                     { month[33m:[39m 
+[32m"Sep"[39m[33m,[39m current[33m:[39m [35m402[39m[33m,[39m 
+previous[33m:[39m [35m370[39m }[33m,[39m[0m
+Next.js build worker exited with code: 1 and signal: null

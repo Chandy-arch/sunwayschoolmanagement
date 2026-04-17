@@ -131,7 +131,7 @@ export async function GET() {
         },
         classSummary,
         students: students.map((s) => ({
-          _id: s._id.toString(),
+          _id: String(s._id),
           studentId: s.studentId,
           name: s.name,
           className: s.className,
@@ -144,7 +144,7 @@ export async function GET() {
           phone: s.phone,
         })),
         todayAttendance: todayAttendance.map((a) => ({
-          _id: a._id.toString(),
+          _id: String(a._id),
           studentId: a.studentId.toString(),
           studentName: a.studentName,
           status: a.status,

@@ -10,6 +10,7 @@ import {
   Message,
   DashboardStats,
   ChartData,
+  ExamType,
 } from "@/types";
 
 // ==================== CLASSES ====================

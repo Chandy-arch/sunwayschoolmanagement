@@ -33,7 +33,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     if (className !== undefined) update.className = className || undefined;
     if (color !== undefined) update.color = color || undefined;
 
-    const event = await EventModel.findByIdAndUpdate(id, update, { new: true }).lean();
+    const event = await EventModel.findByIdAndUpdate(id, update, { new: true });
 
     if (!event) {
       return NextResponse.json({ success: false, message: "Event not found" }, { status: 404 });

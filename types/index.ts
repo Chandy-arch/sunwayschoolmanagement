@@ -229,9 +229,9 @@ export interface DashboardStats {
 }
 
 export interface ChartData {
-  name: string;
+  name?: string;
   value?: number;
-  [key: string]: string | number | undefined;
+  [key: string]: string | number | null | undefined;
 }
 
 export interface ApiResponse<T = unknown> {

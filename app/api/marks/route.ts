@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: marks.map((m) => ({
-        _id: m._id.toString(),
+        _id: String(m._id),
         studentId: m.studentId.toString(),
         studentName: m.studentName,
         className: m.className,

@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       success: true,
       data: events.map((e) => ({
-        _id: e._id.toString(),
+        _id: String(e._id),
         title: e.title,
         description: e.description || "",
         eventType: e.eventType,

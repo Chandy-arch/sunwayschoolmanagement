@@ -63,7 +63,6 @@ export default function ParentLayout({ children }: { children: React.ReactNode }
           title={pageInfo.title}
           subtitle={pageInfo.subtitle}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-          userRole="parent"
         />
         <main className="flex-1 p-4 md:p-6 overflow-auto">
           {children}

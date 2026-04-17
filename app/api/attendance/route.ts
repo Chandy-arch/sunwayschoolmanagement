@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: records.map((r) => ({
-        _id: r._id.toString(),
+        _id: String(r._id),
         studentId: r.studentId.toString(),
         studentName: r.studentName,
         className: r.className,

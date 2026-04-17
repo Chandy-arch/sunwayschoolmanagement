@@ -1,0 +1,107 @@
+﻿app/(dashboard)/admin/reports/page.tsx(320,21): error TS2741: Property 'name' is missing in type '{ month: string; current: number; previous: number; }' but required in type 'ChartData'.
+app/(dashboard)/admin/reports/page.tsx(321,21): error TS2741: Property 'name' is missing in type '{ month: string; current: number; previous: number; }' but required in type 'ChartData'.
+app/(dashboard)/admin/reports/page.tsx(322,21): error TS2741: Property 'name' is missing in type '{ month: string; current: number; previous: number; }' but required in type 'ChartData'.
+app/(dashboard)/admin/reports/page.tsx(323,21): error TS2741: Property 'name' is missing in type '{ month: string; current: number; previous: number; }' but required in type 'ChartData'.
+app/(dashboard)/admin/reports/page.tsx(324,21): error TS2741: Property 'name' is missing in type '{ month: string; current: number; previous: number; }' but required in type 'ChartData'.
+app/(dashboard)/admin/reports/page.tsx(325,21): error TS2741: Property 'name' is missing in type '{ month: string; current: number; previous: number; }' but required in type 'ChartData'.
+app/(dashboard)/admin/reports/page.tsx(326,21): error TS2741: Property 'name' is missing in type '{ month: string; current: number; previous: number; }' but required in type 'ChartData'.
+app/(dashboard)/admin/reports/page.tsx(327,21): error TS2741: Property 'name' is missing in type '{ month: string; current: number; previous: number; }' but required in type 'ChartData'.
+app/(dashboard)/admin/reports/page.tsx(328,21): error TS2741: Property 'name' is missing in type '{ month: string; current: number; previous: number; }' but required in type 'ChartData'.
+app/(dashboard)/admin/reports/page.tsx(329,21): error TS2741: Property 'name' is missing in type '{ month: string; current: number; previous: number; }' but required in type 'ChartData'.
+app/(dashboard)/parent/layout.tsx(66,11): error TS2322: Type '{ title: string; subtitle: string; onMenuClick: () => void; userRole: string; }' is not assignable to type 'IntrinsicAttributes & HeaderProps'.
+  Property 'userRole' does not exist on type 'IntrinsicAttributes & HeaderProps'.
+app/(dashboard)/parent/page.tsx(186,17): error TS2322: Type '{ subject: string; marks: number; }[]' is not assignable to type 'ChartData[]'.
+  Property 'name' is missing in type '{ subject: string; marks: number; }' but required in type 'ChartData'.
+app/(dashboard)/parent/performance/page.tsx(216,19): error TS2322: Type 'Record<string, string | number | null>[]' is not assignable to type 'ChartData[]'.
+  Property 'name' is missing in type 'Record<string, string | number | null>' but required in type 'ChartData'.
+app/(dashboard)/staff/page.tsx(200,19): error TS2322: Type '{ subject: string; average: number; }[]' is not assignable to type 'ChartData[]'.
+  Property 'name' is missing in type '{ subject: string; average: number; }' but required in type 'ChartData'.
+app/api/assignments/route.ts(40,32): error TS2339: Property 'className' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'className' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/assignments/route.ts(41,30): error TS2339: Property 'section' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'section' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/assignments/route.ts(60,14): error TS18046: 'a._id' is of type 'unknown'.
+app/api/attendance/route.ts(49,14): error TS18046: 'r._id' is of type 'unknown'.
+app/api/events/[id]/route.ts(45,20): error TS2339: Property '_id' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property '_id' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/[id]/route.ts(46,22): error TS2339: Property 'title' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'title' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/[id]/route.ts(47,28): error TS2339: Property 'description' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'description' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/[id]/route.ts(48,26): error TS2339: Property 'eventType' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'eventType' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/[id]/route.ts(49,26): error TS2339: Property 'startDate' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'startDate' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/[id]/route.ts(50,24): error TS2339: Property 'endDate' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'endDate' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/[id]/route.ts(51,26): error TS2339: Property 'isFullDay' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'isFullDay' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/[id]/route.ts(52,31): error TS2339: Property 'targetAudience' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'targetAudience' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/[id]/route.ts(53,26): error TS2339: Property 'className' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'className' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/[id]/route.ts(54,22): error TS2339: Property 'color' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'color' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/[id]/route.ts(55,25): error TS2339: Property 'isActive' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[] | (FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })'.
+  Property 'isActive' does not exist on type '(FlattenMaps<any> & Required<{ _id: unknown; }> & { __v: number; })[]'.
+app/api/events/route.ts(56,14): error TS18046: 'e._id' is of type 'unknown'.
+app/api/fees/[id]/route.ts(12,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/fees/[id]/route.ts(12,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/fees/[id]/route.ts(30,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/fees/[id]/route.ts(30,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/fees/[id]/route.ts(100,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/fees/[id]/route.ts(100,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/fees/route.ts(12,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/fees/route.ts(12,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/fees/route.ts(88,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/fees/route.ts(88,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/marks/route.ts(39,14): error TS18046: 'm._id' is of type 'unknown'.
+app/api/parent/me/route.ts(69,19): error TS18046: 'child._id' is of type 'unknown'.
+app/api/parent/me/route.ts(138,16): error TS18046: 'm._id' is of type 'unknown'.
+app/api/parent/me/route.ts(150,16): error TS18046: 'f._id' is of type 'unknown'.
+app/api/staff/[id]/account/route.ts(24,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/staff/[id]/account/route.ts(24,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/staff/[id]/account/route.ts(115,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/staff/[id]/account/route.ts(115,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/staff/[id]/account/route.ts(159,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/staff/[id]/account/route.ts(159,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/staff/[id]/route.ts(15,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/staff/[id]/route.ts(15,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/staff/[id]/route.ts(40,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/staff/[id]/route.ts(40,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/staff/[id]/route.ts(76,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/staff/[id]/route.ts(76,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/staff/me/route.ts(134,16): error TS18046: 's._id' is of type 'unknown'.
+app/api/staff/me/route.ts(147,16): error TS18046: 'a._id' is of type 'unknown'.
+app/api/staff/route.ts(12,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/staff/route.ts(12,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/staff/route.ts(67,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/staff/route.ts(67,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/students/[id]/parent-account/route.ts(24,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/students/[id]/parent-account/route.ts(24,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/students/[id]/parent-account/route.ts(146,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/students/[id]/parent-account/route.ts(146,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/students/[id]/parent-account/route.ts(191,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/students/[id]/parent-account/route.ts(191,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/students/[id]/route.ts(15,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/students/[id]/route.ts(15,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/students/[id]/route.ts(40,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/students/[id]/route.ts(40,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/students/[id]/route.ts(79,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/students/[id]/route.ts(79,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/students/route.ts(12,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/students/route.ts(12,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+app/api/students/route.ts(88,21): error TS18048: 'session.user' is possibly 'undefined'.
+app/api/students/route.ts(88,34): error TS2339: Property 'role' does not exist on type '{ name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; }'.
+lib/mock-data.ts(171,22): error TS2304: Cannot find name 'ExamType'.
+lib/mock-data.ts(317,3): error TS2741: Property 'name' is missing in type '{ subject: string; average: number; }' but required in type 'ChartData'.
+lib/mock-data.ts(318,3): error TS2741: Property 'name' is missing in type '{ subject: string; average: number; }' but required in type 'ChartData'.
+lib/mock-data.ts(319,3): error TS2741: Property 'name' is missing in type '{ subject: string; average: number; }' but required in type 'ChartData'.
+lib/mock-data.ts(320,3): error TS2741: Property 'name' is missing in type '{ subject: string; average: number; }' but required in type 'ChartData'.
+lib/mock-data.ts(321,3): error TS2741: Property 'name' is missing in type '{ subject: string; average: number; }' but required in type 'ChartData'.
+lib/mock-data.ts(322,3): error TS2741: Property 'name' is missing in type '{ subject: string; average: number; }' but required in type 'ChartData'.
+lib/mock-data.ts(345,3): error TS2741: Property 'name' is missing in type '{ day: string; male: number; female: number; }' but required in type 'ChartData'.
+lib/mock-data.ts(346,3): error TS2741: Property 'name' is missing in type '{ day: string; male: number; female: number; }' but required in type 'ChartData'.
+lib/mock-data.ts(347,3): error TS2741: Property 'name' is missing in type '{ day: string; male: number; female: number; }' but required in type 'ChartData'.
+lib/mock-data.ts(348,3): error TS2741: Property 'name' is missing in type '{ day: string; male: number; female: number; }' but required in type 'ChartData'.
+lib/mock-data.ts(349,3): error TS2741: Property 'name' is missing in type '{ day: string; male: number; female: number; }' but required in type 'ChartData'.

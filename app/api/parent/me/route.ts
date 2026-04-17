@@ -66,7 +66,7 @@ export async function GET() {
 
     // Build per-child data
     const childrenData = children.map((child) => {
-      const cid = child._id.toString();
+      const cid = String(child._id);
 
       // Attendance stats
       const childAttendance = attendance.filter((a) => a.studentId.toString() === cid);
@@ -135,7 +135,7 @@ export async function GET() {
           daily: dailyAttendance,
         },
         marks: childMarks.map((m) => ({
-          _id: m._id.toString(),
+          _id: String(m._id),
           subject: m.subject,
           examType: m.examType,
           marksObtained: m.marksObtained,
@@ -147,7 +147,7 @@ export async function GET() {
         latestExam,
         avgPercentage,
         fees: childFees.map((f) => ({
-          _id: f._id.toString(),
+          _id: String(f._id),
           feeType: f.feeType,
           amount: f.amount,
           paidAmount: f.paidAmount || 0,

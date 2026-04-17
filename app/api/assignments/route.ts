@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
       if (!childId) {
         return NextResponse.json({ success: false, message: "childId required" }, { status: 400 });
       }
-      const child = await StudentModel.findById(childId).lean();
+      const child = await StudentModel.findById(childId);
       if (!child) {
         return NextResponse.json({ success: false, message: "Child not found" }, { status: 404 });
       }
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       success: true,
       data: assignments.map((a) => ({
-        _id: a._id.toString(),
+        _id: String(a._id),
         title: a.title,
         description: a.description,
         subject: a.subject,
