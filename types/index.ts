@@ -45,6 +45,7 @@ export interface Student {
   parentName: string;
   parentPhone: string;
   parentEmail: string;
+  hasParentAccount?: boolean;
   admissionDate: string;
   admissionNumber: string;
   isActive: boolean;
@@ -63,6 +64,7 @@ export interface Staff {
   department: string;
   subjects: string[];
   classes: string[];
+  classTeacher?: string;
   qualifications: string;
   experience: number;
   salary: number;
@@ -70,6 +72,9 @@ export interface Staff {
   gender: Gender;
   address: string;
   photo?: string;
+  teacherType?: "class_teacher" | "subject_teacher";
+  userId?: string;
+  hasLoginAccount?: boolean;
   isActive: boolean;
   createdAt: string;
 }
@@ -144,6 +149,14 @@ export interface FeeRecord {
   receiptNumber?: string;
   paymentMethod?: string;
   remarks?: string;
+}
+
+export interface Fee extends FeeRecord {
+  studentName: string;
+  className: string;
+  section: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface TimetableSlot {

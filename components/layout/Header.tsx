@@ -4,9 +4,9 @@ import { useSession } from "next-auth/react";
 import { Bell, Search, Menu, X, ChevronDown } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { useState } from "react";
-import { mockNotifications } from "@/lib/mock-data";
 import { formatDate } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import { useNotifications } from "@/components/providers/NotificationContext";
 
 interface HeaderProps {
   title: string;
@@ -26,7 +26,7 @@ export default function Header({ title, subtitle, onMenuClick }: HeaderProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const unreadCount = mockNotifications.filter((n) => !n.isRead).length;
+  const { notifications, unreadCount, markAllRead, markRead } = useNotifications();
 
   return (
     <header className="h-16 bg-white border-b border-gray-200 flex items-center px-6 gap-4 sticky top-0 z-30 shadow-sm">
@@ -80,18 +80,21 @@ export default function Header({ title, subtitle, onMenuClick }: HeaderProps) {
                 <div className="flex items-center justify-between p-4 border-b border-gray-100">
                   <h3 className="font-semibold text-gray-900 text-sm">Notifications</h3>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-semibold">
-                      {unreadCount} new
-                    </span>
+                    {unreadCount > 0 && (
+                      <button onClick={markAllRead} className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-semibold hover:bg-red-200">
+                        {unreadCount} new
+                      </button>
+                    )}
                     <button onClick={() => setShowNotifications(false)}>
                       <X className="w-4 h-4 text-gray-400 hover:text-gray-600" />
                     </button>
                   </div>
                 </div>
                 <div className="max-h-80 overflow-y-auto">
-                  {mockNotifications.map((notif) => (
+                  {notifications.map((notif) => (
                     <div
                       key={notif._id}
+                      onClick={() => markRead(notif._id)}
                       className={cn(
                         "p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors",
                         !notif.isRead && "bg-indigo-50/50"

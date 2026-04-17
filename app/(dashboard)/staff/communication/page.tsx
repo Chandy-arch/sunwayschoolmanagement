@@ -1,20 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogCloseButton, DialogFooter } from "@/components/ui/dialog";
-import { mockMessages, mockNotifications } from "@/lib/mock-data";
 import { formatDate } from "@/lib/utils";
-import { Send, Bell, MessageSquare, Users, CheckCheck, ChevronRight } from "lucide-react";
+import { Send, Bell, MessageSquare, Users, CheckCheck, ChevronRight, Loader2 } from "lucide-react";
 
-const parents = [
-  { id: "p1", name: "Mr. Suresh Kumar", child: "Arjun Kumar", class: "6A" },
-  { id: "p2", name: "Mrs. Meena Raj", child: "Priya Raj", class: "6A" },
-  { id: "p3", name: "Mr. Ramesh Babu", child: "Karthik Babu", class: "7B" },
-];
+interface StudentInfo {
+  _id: string;
+  name: string;
+  className: string;
+  section: string;
+  rollNumber: number;
+  parentName: string;
+  parentPhone: string;
+}
+
+interface ClassInfo {
+  name: string;
+  className: string;
+  section: string;
+}
 
 export default function StaffCommunicationPage() {
   const [activeTab, setActiveTab] = useState<"inbox" | "notifications">("inbox");
@@ -24,11 +33,52 @@ export default function StaffCommunicationPage() {
   const [body, setBody] = useState("");
   const [sentMsg, setSentMsg] = useState(false);
   const [broadcastOpen, setBroadcastOpen] = useState(false);
+  const [broadcastClass, setBroadcastClass] = useState("");
   const [broadcastMsg, setBroadcastMsg] = useState("");
   const [broadcastSent, setBroadcastSent] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [students, setStudents] = useState<StudentInfo[]>([]);
+  const [classes, setClasses] = useState<ClassInfo[]>([]);
 
-  const messages = mockMessages;
-  const notifications = mockNotifications.filter(n => n.targetRole === "staff" || n.targetRole === "all");
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/staff/me", { cache: "no-store" });
+        const json = await res.json();
+        if (json.success) {
+          setStudents(json.data.students);
+          setClasses(json.data.classSummary);
+          if (json.data.classSummary.length > 0)
+            setBroadcastClass(json.data.classSummary[0].name);
+        }
+      } catch {
+        // silently fail
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  // Derive unique parents from students
+  const parents = students
+    .filter((s) => s.parentName)
+    .reduce<{ id: string; name: string; child: string; class: string }[]>(
+      (acc, s) => {
+        if (!acc.find((p) => p.name === s.parentName)) {
+          acc.push({
+            id: s._id,
+            name: s.parentName,
+            child: s.name,
+            class: `${s.className}${s.section ? " " + s.section : ""}`,
+          });
+        }
+        return acc;
+      },
+      []
+    );
+
+  const messages: { _id: string; senderName: string; receiverName: string; subject: string; content: string; createdAt: string; isRead: boolean }[] = [];
+  const notifications: { _id: string; title: string; message: string; type: string; priority: string; createdAt: string; isRead: boolean }[] = [];
 
   const handleSend = () => {
     if (!selectedRecipient || !body.trim()) return;
@@ -41,6 +91,14 @@ export default function StaffCommunicationPage() {
     setBroadcastSent(true);
     setTimeout(() => { setBroadcastOpen(false); setBroadcastSent(false); setBroadcastMsg(""); }, 1500);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64 text-gray-400">
+        <Loader2 className="w-6 h-6 animate-spin mr-2" /> Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-5">
@@ -82,7 +140,16 @@ export default function StaffCommunicationPage() {
       {activeTab === "inbox" && (
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           <div className="xl:col-span-2 space-y-2">
-            {messages.map((msg, i) => (
+            {messages.length === 0 ? (
+              <Card>
+                <CardContent className="py-12 text-center">
+                  <MessageSquare className="w-10 h-10 text-gray-200 mx-auto mb-3" />
+                  <p className="text-sm text-gray-400">No messages yet</p>
+                  <p className="text-xs text-gray-300 mt-1">Messaging backend coming soon</p>
+                </CardContent>
+              </Card>
+            ) : (
+            messages.map((msg, i) => (
               <div key={msg._id} className="bg-white rounded-xl border border-gray-100 p-4 hover:border-emerald-200 hover:shadow-sm transition-all cursor-pointer">
                 <div className="flex items-start gap-3">
                   <Avatar name={msg.senderName} size="md" colorIndex={i % 8} />
@@ -102,10 +169,9 @@ export default function StaffCommunicationPage() {
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+            )}
           </div>
-
-          {/* Quick Contacts */}
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm">Quick Message Parents</CardTitle>
@@ -128,7 +194,16 @@ export default function StaffCommunicationPage() {
 
       {activeTab === "notifications" && (
         <div className="space-y-3">
-          {notifications.map(notif => (
+          {notifications.length === 0 ? (
+            <Card>
+              <CardContent className="py-12 text-center">
+                <Bell className="w-10 h-10 text-gray-200 mx-auto mb-3" />
+                <p className="text-sm text-gray-400">No notifications</p>
+                <p className="text-xs text-gray-300 mt-1">Notifications backend coming soon</p>
+              </CardContent>
+            </Card>
+          ) : (
+          notifications.map(notif => (
             <div key={notif._id} className={`flex items-start gap-3 p-4 rounded-xl border transition-all ${!notif.isRead ? "bg-indigo-50 border-indigo-100" : "bg-white border-gray-100"}`}>
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
                 notif.type === "academic" ? "bg-blue-100" :
@@ -154,12 +229,13 @@ export default function StaffCommunicationPage() {
                 <p className="text-xs text-gray-400 mt-1">{formatDate(notif.createdAt)}</p>
               </div>
             </div>
-          ))}
+          ))
+          )}
         </div>
       )}
 
       {/* Compose Dialog */}
-      <Dialog isOpen={composeOpen} onClose={() => setComposeOpen(false)} size="lg">
+      <Dialog open={composeOpen} onClose={() => setComposeOpen(false)} maxWidth="lg">
         <DialogHeader>
           <DialogTitle>Compose Message</DialogTitle>
           <DialogCloseButton onClose={() => setComposeOpen(false)} />
@@ -218,9 +294,9 @@ export default function StaffCommunicationPage() {
       </Dialog>
 
       {/* Broadcast Dialog */}
-      <Dialog isOpen={broadcastOpen} onClose={() => setBroadcastOpen(false)} size="lg">
+      <Dialog open={broadcastOpen} onClose={() => setBroadcastOpen(false)} maxWidth="lg">
         <DialogHeader>
-          <DialogTitle>Broadcast to All Parents — Class 6A</DialogTitle>
+          <DialogTitle>Broadcast to All Parents{broadcastClass ? ` — ${broadcastClass}` : ""}</DialogTitle>
           <DialogCloseButton onClose={() => setBroadcastOpen(false)} />
         </DialogHeader>
         <DialogContent>
@@ -234,8 +310,22 @@ export default function StaffCommunicationPage() {
           ) : (
             <div className="space-y-4">
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-700">
-                This message will be sent to all parents of Class 6A (42 parents).
+                This message will be sent to all parents{broadcastClass ? ` of ${broadcastClass}` : ""} ({parents.length} parents).
               </div>
+              {classes.length > 1 && (
+                <div>
+                  <label className="text-xs font-semibold text-gray-700 block mb-1">Class</label>
+                  <select
+                    value={broadcastClass}
+                    onChange={(e) => setBroadcastClass(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"
+                  >
+                    {classes.map((c) => (
+                      <option key={c.name} value={c.name}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <div>
                 <label className="text-xs font-semibold text-gray-700 block mb-1">Message</label>
                 <textarea
