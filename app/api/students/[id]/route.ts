@@ -7,16 +7,17 @@ import StudentModel from "@/models/Student";
 // GET /api/students/[id]
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
     await connectDB();
-    const student = await StudentModel.findById(params.id).lean();
+    const student = await StudentModel.findById(id).lean();
     if (!student) {
       return NextResponse.json({ success: false, message: "Student not found" }, { status: 404 });
     }
@@ -31,9 +32,10 @@ export async function GET(
 // PUT /api/students/[id]
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -50,7 +52,7 @@ export async function PUT(
     if (updateFields.admissionDate) updateFields.admissionDate = new Date(updateFields.admissionDate);
 
     const student = await StudentModel.findByIdAndUpdate(
-      params.id,
+      id,
       { $set: updateFields },
       { new: true, runValidators: true }
     ).lean();
@@ -69,9 +71,10 @@ export async function PUT(
 // DELETE /api/students/[id] — soft delete
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -80,7 +83,7 @@ export async function DELETE(
     await connectDB();
 
     const student = await StudentModel.findByIdAndUpdate(
-      params.id,
+      id,
       { $set: { isActive: false } },
       { new: true }
     ).lean();

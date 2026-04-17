@@ -8,9 +8,10 @@ import StaffModel from "@/models/Staff";
 // PUT /api/assignments/[id] — staff updates their own assignment
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     const role = (session?.user as { role?: string })?.role;
     if (!session || (role !== "staff" && role !== "admin")) {
@@ -23,7 +24,7 @@ export async function PUT(
     const body = await req.json();
     const { title, description, subject, dueDate, academicYear } = body;
 
-    const assignment = await AssignmentModel.findById(params.id);
+    const assignment = await AssignmentModel.findById(id);
     if (!assignment || !assignment.isActive) {
       return NextResponse.json({ success: false, message: "Assignment not found" }, { status: 404 });
     }
@@ -51,9 +52,10 @@ export async function PUT(
 // DELETE /api/assignments/[id] — soft delete
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     const role = (session?.user as { role?: string })?.role;
     if (!session || (role !== "staff" && role !== "admin")) {
@@ -63,7 +65,7 @@ export async function DELETE(
     await connectDB();
 
     const userId = (session.user as { id?: string }).id;
-    const assignment = await AssignmentModel.findById(params.id);
+    const assignment = await AssignmentModel.findById(id);
     if (!assignment || !assignment.isActive) {
       return NextResponse.json({ success: false, message: "Assignment not found" }, { status: 404 });
     }

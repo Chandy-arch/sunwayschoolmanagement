@@ -5,14 +5,15 @@ import connectDB from "@/lib/db";
 import FeeModel from "@/models/Fee";
 
 // GET /api/fees/[id]
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
     await connectDB();
-    const fee = await FeeModel.findById(params.id).lean();
+    const fee = await FeeModel.findById(id).lean();
     if (!fee) return NextResponse.json({ success: false, message: "Fee not found" }, { status: 404 });
     return NextResponse.json({ success: true, data: fee });
   } catch (error) {
@@ -22,8 +23,9 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 }
 
 // PUT /api/fees/[id] — update fee or record a payment
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -31,7 +33,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     await connectDB();
 
     const body = await request.json();
-    const fee = await FeeModel.findById(params.id);
+    const fee = await FeeModel.findById(id);
     if (!fee) return NextResponse.json({ success: false, message: "Fee not found" }, { status: 404 });
 
     // Payment collection
@@ -91,14 +93,15 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // DELETE /api/fees/[id]
-export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
     await connectDB();
-    await FeeModel.findByIdAndDelete(params.id);
+    await FeeModel.findByIdAndDelete(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("DELETE /api/fees/[id] error:", error);

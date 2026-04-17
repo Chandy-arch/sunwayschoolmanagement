@@ -7,16 +7,17 @@ import StaffModel from "@/models/Staff";
 // GET /api/staff/[id]
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
     await connectDB();
-    const staff = await StaffModel.findById(params.id).lean();
+    const staff = await StaffModel.findById(id).lean();
     if (!staff) {
       return NextResponse.json({ success: false, message: "Staff member not found" }, { status: 404 });
     }
@@ -31,9 +32,10 @@ export async function GET(
 // PUT /api/staff/[id]
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -47,7 +49,7 @@ export async function PUT(
     const { staffId: _staffId, email: _email, userId: _userId, ...updateFields } = body;
 
     const staff = await StaffModel.findByIdAndUpdate(
-      params.id,
+      id,
       { $set: updateFields },
       { new: true, runValidators: true }
     ).lean();
@@ -66,9 +68,10 @@ export async function PUT(
 // DELETE /api/staff/[id] — soft delete (set isActive = false)
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -77,7 +80,7 @@ export async function DELETE(
     await connectDB();
 
     const staff = await StaffModel.findByIdAndUpdate(
-      params.id,
+      id,
       { $set: { isActive: false } },
       { new: true }
     ).lean();

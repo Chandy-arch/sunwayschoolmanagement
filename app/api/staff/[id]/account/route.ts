@@ -16,9 +16,10 @@ function generatePassword(name: string): string {
 // POST /api/staff/[id]/account — create login account for staff
 export async function POST(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -26,7 +27,7 @@ export async function POST(
 
     await connectDB();
 
-    const staff = await StaffModel.findById(params.id);
+    const staff = await StaffModel.findById(id);
     if (!staff) {
       return NextResponse.json({ success: false, message: "Staff member not found" }, { status: 404 });
     }
@@ -106,9 +107,10 @@ export async function POST(
 // PUT /api/staff/[id]/account — reset password
 export async function PUT(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -116,7 +118,7 @@ export async function PUT(
 
     await connectDB();
 
-    const staff = await StaffModel.findById(params.id);
+    const staff = await StaffModel.findById(id);
     if (!staff || !staff.userId) {
       return NextResponse.json({ success: false, message: "No login account found for this staff member" }, { status: 404 });
     }
@@ -149,9 +151,10 @@ export async function PUT(
 // DELETE /api/staff/[id]/account — revoke login access
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -159,7 +162,7 @@ export async function DELETE(
 
     await connectDB();
 
-    const staff = await StaffModel.findById(params.id);
+    const staff = await StaffModel.findById(id);
     if (!staff || !staff.userId) {
       return NextResponse.json({ success: false, message: "No login account found for this staff member" }, { status: 404 });
     }

@@ -16,9 +16,10 @@ function generatePassword(name: string): string {
 // POST /api/students/[id]/parent-account — create parent login account
 export async function POST(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -26,7 +27,7 @@ export async function POST(
 
     await connectDB();
 
-    const student = await StudentModel.findById(params.id);
+    const student = await StudentModel.findById(id);
     if (!student) {
       return NextResponse.json({ success: false, message: "Student not found" }, { status: 404 });
     }
@@ -137,9 +138,10 @@ export async function POST(
 // PUT /api/students/[id]/parent-account — reset password
 export async function PUT(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -147,7 +149,7 @@ export async function PUT(
 
     await connectDB();
 
-    const student = await StudentModel.findById(params.id);
+    const student = await StudentModel.findById(id);
     if (!student || !student.parentId) {
       return NextResponse.json({ success: false, message: "No parent login account found for this student" }, { status: 404 });
     }
@@ -181,9 +183,10 @@ export async function PUT(
 // DELETE /api/students/[id]/parent-account — revoke parent login access
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -191,7 +194,7 @@ export async function DELETE(
 
     await connectDB();
 
-    const student = await StudentModel.findById(params.id);
+    const student = await StudentModel.findById(id);
     if (!student || !student.parentId) {
       return NextResponse.json({ success: false, message: "No parent login account found for this student" }, { status: 404 });
     }
