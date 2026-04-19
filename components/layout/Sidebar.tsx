@@ -110,8 +110,8 @@ export default function Sidebar({ role, hiddenNavItems = [] }: SidebarProps) {
       {/* Logo */}
       <div className="p-4 border-b border-white/10">
         <Link href={`/${role}`} className="flex items-center gap-3">
-          <div className="w-9 h-9 flex-shrink-0">
-            <Image src="/logo.png" alt="Sunway" width={36} height={36} className="w-9 h-9 object-contain" />
+          <div className="w-9 h-9 flex-shrink-0 rounded-lg bg-white p-0.5 shadow-sm">
+            <Image src="/logo.png" alt="Sunway" width={36} height={36} className="w-full h-full object-contain" />
           </div>
           {!collapsed && (
             <div>

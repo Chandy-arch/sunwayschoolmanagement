@@ -523,17 +523,14 @@ export default function StaffManagementPage() {
                 <p className="text-xs text-gray-500 mb-1">Staff ID</p>
                 <p className="text-xl font-mono font-bold text-indigo-600">{addSuccess.staffId}</p>
               </div>
-              {addSuccess.loginEmail && addSuccess.loginPassword && (
-                <div className="w-full bg-amber-50 border border-amber-200 rounded-xl p-4 text-left space-y-2">
-                  <p className="text-xs font-bold text-amber-700 uppercase tracking-wide">⚠ Login Credentials — Share with Staff</p>
+              {addSuccess.loginEmail && (
+                <div className="w-full bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-left space-y-2">
+                  <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide">Login Account Created</p>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500 w-20 flex-shrink-0">Username</span>
-                    <code className="flex-1 text-xs font-mono bg-white border border-amber-200 rounded px-2 py-1 text-indigo-700 break-all">{addSuccess.loginEmail}</code>
+                    <span className="text-xs text-gray-500 w-20 flex-shrink-0">Login Email</span>
+                    <code className="flex-1 text-xs font-mono bg-white border border-emerald-200 rounded px-2 py-1 text-indigo-700 break-all">{addSuccess.loginEmail}</code>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500 w-20 flex-shrink-0">Password</span>
-                    <code className="flex-1 text-xs font-mono bg-white border border-amber-200 rounded px-2 py-1 text-indigo-700">{addSuccess.loginPassword}</code>
-                  </div>
+                  <p className="text-xs text-gray-400">Staff can log in using this email. They will be prompted to set their password on first login.</p>
                 </div>
               )}
             </div>
@@ -853,9 +850,10 @@ function StaffFormFields({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <label className="text-xs font-medium text-gray-500 w-32 flex-shrink-0 text-right">Email *</label>
+            <label className="text-xs font-medium text-gray-500 w-32 flex-shrink-0 text-right">Personal Email *</label>
             <div className="flex-1">
-              <Input {...register("email")} type="email" placeholder="staff@school.edu" disabled={submitting} />
+              <Input {...register("email")} type="email" placeholder="e.g. staff@gmail.com" disabled={submitting} />
+              <p className="text-xs text-gray-400 mt-0.5">Personal Gmail — login email will be auto-generated</p>
               {errors.email && <p className="text-xs text-red-500 mt-0.5">{errors.email.message}</p>}
             </div>
           </div>

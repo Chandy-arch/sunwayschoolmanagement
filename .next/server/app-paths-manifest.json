@@ -1,9 +1,10 @@
 {
+  "/api/students/[id]/parent-account/route": "app/api/students/[id]/parent-account/route.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/parent/me/route": "app/api/parent/me/route.js",
+  "/api/assignments/route": "app/api/assignments/route.js",
   "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(dashboard)/parent/announcements/page": "app/(dashboard)/parent/announcements/page.js",
-  "/(dashboard)/parent/calendar/page": "app/(dashboard)/parent/calendar/page.js",
-  "/(dashboard)/parent/fees/page": "app/(dashboard)/parent/fees/page.js",
-  "/(dashboard)/parent/homework/page": "app/(dashboard)/parent/homework/page.js",
-  "/(dashboard)/admin/page": "app/(dashboard)/admin/page.js"
+  "/(dashboard)/parent/page": "app/(dashboard)/parent/page.js",
+  "/(dashboard)/parent/attendance/page": "app/(dashboard)/parent/attendance/page.js",
+  "/(dashboard)/parent/homework/page": "app/(dashboard)/parent/homework/page.js"
 }

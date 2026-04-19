@@ -631,17 +631,14 @@ export default function StudentsPage() {
                   <p className="text-base font-mono font-bold text-indigo-600">{addSuccess.admissionNumber}</p>
                 </div>
               </div>
-              {addSuccess.parentLoginEmail && addSuccess.parentLoginPassword && (
-                <div className="w-full bg-amber-50 border border-amber-200 rounded-xl p-4 text-left space-y-2">
-                  <p className="text-xs font-bold text-amber-700 uppercase tracking-wide">⚠ Parent Login — Share with Parent</p>
+              {addSuccess.parentLoginEmail && (
+                <div className="w-full bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-left space-y-2">
+                  <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide">Parent Login Account Created</p>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500 w-20 flex-shrink-0">Username</span>
-                    <code className="flex-1 text-xs font-mono bg-white border border-amber-200 rounded px-2 py-1 text-indigo-700 break-all">{addSuccess.parentLoginEmail}</code>
+                    <span className="text-xs text-gray-500 w-20 flex-shrink-0">Login Email</span>
+                    <code className="flex-1 text-xs font-mono bg-white border border-emerald-200 rounded px-2 py-1 text-indigo-700 break-all">{addSuccess.parentLoginEmail}</code>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500 w-20 flex-shrink-0">Password</span>
-                    <code className="flex-1 text-xs font-mono bg-white border border-amber-200 rounded px-2 py-1 text-indigo-700">{addSuccess.parentLoginPassword}</code>
-                  </div>
+                  <p className="text-xs text-gray-400">Parent can log in using this email. They will be prompted to set their password on first login.</p>
                 </div>
               )}
             </div>
@@ -1053,7 +1050,8 @@ function StudentFormFields({
           <div className="flex items-center gap-3">
             <label className="text-xs font-medium text-gray-500 w-32 flex-shrink-0 text-right">Parent Email</label>
             <div className="flex-1">
-              <Input {...register("parentEmail")} type="email" placeholder="parent@email.com" disabled={submitting} />
+              <Input {...register("parentEmail")} type="email" placeholder="parent@gmail.com" disabled={submitting} />
+              <p className="text-xs text-gray-400 mt-0.5">Personal Gmail — login email will be auto-generated</p>
               {errors.parentEmail && <p className="text-xs text-red-500 mt-0.5">{errors.parentEmail.message}</p>}
             </div>
           </div>

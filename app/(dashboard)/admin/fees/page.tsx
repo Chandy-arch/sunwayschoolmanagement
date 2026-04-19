@@ -81,6 +81,7 @@ export default function FeeManagementPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [addSuccess, setAddSuccess] = useState<Fee | null>(null);
   const [paySuccess, setPaySuccess] = useState<Fee | null>(null);
+  const [lastPaidAmount, setLastPaidAmount] = useState<number>(0);
 
   // Student search
   const [studentQuery, setStudentQuery] = useState("");
@@ -173,6 +174,7 @@ export default function FeeManagementPage() {
   const handlePaySubmit = async (values: PayFormValues) => {
     if (!payTarget) return;
     setSubmitting(true); setFormError(null);
+    setLastPaidAmount(values.paidAmount);
     try {
       const payment: PaymentData = {
         paidAmount: values.paidAmount, paymentMethod: values.paymentMethod,
@@ -597,7 +599,7 @@ export default function FeeManagementPage() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-900">
-                  {formatCurrency(typeof payAmtVal === "number" ? payAmtVal : 0)} Collected
+                  {formatCurrency(lastPaidAmount)} Collected
                 </h3>
                 <p className="text-sm text-gray-500">{payTarget?.studentName} — {payTarget?.feeType}</p>
               </div>

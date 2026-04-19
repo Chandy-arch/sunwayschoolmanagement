@@ -5,7 +5,6 @@ import connectDB from "@/lib/db";
 import StudentModel from "@/models/Student";
 import FeeModel from "@/models/Fee";
 import UserModel from "@/models/User";
-import bcrypt from "bcryptjs";
 
 function generateSchoolEmail(name: string, suffix = 0): string {
   const base = name.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -151,12 +150,11 @@ export async function POST(request: NextRequest) {
       }
       parentLoginEmail = candidate;
       parentLoginPassword = generatePassword();
-      const salt = await bcrypt.genSalt(12);
-      const hashed = await bcrypt.hash(parentLoginPassword, salt);
+      // Pass plain password — UserModel pre-save hook will hash it
       const parentUser = await UserModel.create({
         name: parentName.trim(),
         email: parentLoginEmail,
-        password: hashed,
+        password: parentLoginPassword,
         role: "parent",
         phone: parentPhone.trim(),
         isActive: true,

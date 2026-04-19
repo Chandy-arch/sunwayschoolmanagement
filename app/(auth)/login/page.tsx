@@ -123,7 +123,9 @@ export default function LoginPage() {
         {/* Logo & School Name */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center mb-4">
-            <Image src="/logo.png" alt="Sunway Global School" width={90} height={90} priority />
+            <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-orange-50 to-blue-50 border-2 border-blue-100 shadow-md flex items-center justify-center p-1">
+              <Image src="/logo.png" alt="Sunway Global School" width={88} height={88} priority className="object-contain" />
+            </div>
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Sunway Global School</h1>
           <p className="text-sm text-gray-500 mt-1">School Management System</p>
