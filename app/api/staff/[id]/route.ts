@@ -48,6 +48,13 @@ export async function PUT(
     // Prevent staffId and email from being changed (use a separate flow if needed)
     const { staffId: _staffId, email: _email, userId: _userId, ...updateFields } = body;
 
+    // Sync classTeacher field based on teacherType and classes
+    if (updateFields.teacherType === "class_teacher") {
+      updateFields.classTeacher = updateFields.classes?.[0] || "";
+    } else if (updateFields.teacherType === "subject_teacher") {
+      updateFields.classTeacher = "";
+    }
+
     const staff = await StaffModel.findByIdAndUpdate(
       id,
       { $set: updateFields },

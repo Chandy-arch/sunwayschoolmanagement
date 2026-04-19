@@ -137,6 +137,7 @@ export async function POST(req: NextRequest) {
       department: department.trim(),
       subjects: subjects || [],
       classes: classes || [],
+      classTeacher: teacherType === "class_teacher" ? (classes?.[0] || "") : "",
       qualifications: qualifications || "",
       experience: Number(experience) || 0,
       salary: Number(salary) || 0,

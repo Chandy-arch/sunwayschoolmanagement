@@ -113,7 +113,9 @@ export default function StaffManagementPage() {
         designation: editStaff.designation,
         department: editStaff.department,
         subjectsRaw: editStaff.subjects.join(", "),
-        classesRaw: editStaff.classes.join(", "),
+        classesRaw: editStaff.teacherType === "subject_teacher"
+          ? editStaff.classes.join(", ")
+          : (editStaff.classes[0] || ""),
         qualifications: editStaff.qualifications,
         experience: editStaff.experience,
         salary: editStaff.salary,
@@ -132,7 +134,9 @@ export default function StaffManagementPage() {
     designation: values.designation,
     department: values.department,
     subjects: values.subjectsRaw ? values.subjectsRaw.split(",").map((s) => s.trim()).filter(Boolean) : [],
-    classes: values.classesRaw ? values.classesRaw.split(",").map((s) => s.trim()).filter(Boolean) : [],
+    classes: values.teacherType === "subject_teacher"
+      ? (values.classesRaw ? values.classesRaw.split(",").map((s) => s.trim()).filter(Boolean) : [])
+      : (values.classesRaw?.trim() ? [values.classesRaw.trim()] : []),
     qualifications: values.qualifications || "",
     experience: values.experience,
     salary: values.salary,
@@ -495,6 +499,24 @@ export default function StaffManagementPage() {
                 </div>
               </div>
             )}
+            {viewStaff.teacherType === "class_teacher" && viewStaff.classes[0] && (
+              <div className="mt-4">
+                <p className="text-sm font-semibold text-gray-700 mb-2">Homeroom Class</p>
+                <span className="text-xs px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-medium">
+                  {viewStaff.classes[0]}
+                </span>
+              </div>
+            )}
+            {viewStaff.teacherType === "subject_teacher" && viewStaff.classes.length > 0 && (
+              <div className="mt-4">
+                <p className="text-sm font-semibold text-gray-700 mb-2">Classes Teaching</p>
+                <div className="flex flex-wrap gap-2">
+                  {viewStaff.classes.map((cls) => (
+                    <span key={cls} className="text-xs px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700">{cls}</span>
+                  ))}
+                </div>
+              </div>
+            )}
           </DialogContent>
           <DialogFooter>
             <Button variant="outline" onClick={() => setViewStaff(null)}>Close</Button>
@@ -524,13 +546,27 @@ export default function StaffManagementPage() {
                 <p className="text-xl font-mono font-bold text-indigo-600">{addSuccess.staffId}</p>
               </div>
               {addSuccess.loginEmail && (
-                <div className="w-full bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-left space-y-2">
+                <div className="w-full bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-left space-y-3">
                   <p className="text-xs font-bold text-emerald-700 uppercase tracking-wide">Login Account Created</p>
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 text-center">
+                    <p className="text-xs font-semibold text-amber-700">⚠ This password will only be shown once. Copy and share it with the staff member.</p>
+                  </div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-gray-500 w-20 flex-shrink-0">Login Email</span>
                     <code className="flex-1 text-xs font-mono bg-white border border-emerald-200 rounded px-2 py-1 text-indigo-700 break-all">{addSuccess.loginEmail}</code>
+                    <Button variant="ghost" size="icon-sm" onClick={() => copyToClipboard(addSuccess.loginEmail!, "email")} className="flex-shrink-0">
+                      {copiedField === "email" ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                    </Button>
                   </div>
-                  <p className="text-xs text-gray-400">Staff can log in using this email. They will be prompted to set their password on first login.</p>
+                  {addSuccess.loginPassword && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500 w-20 flex-shrink-0">Password</span>
+                      <code className="flex-1 text-xs font-mono bg-white border border-emerald-200 rounded px-2 py-1 text-indigo-700">{addSuccess.loginPassword}</code>
+                      <Button variant="ghost" size="icon-sm" onClick={() => copyToClipboard(addSuccess.loginPassword!, "password")} className="flex-shrink-0">
+                        {copiedField === "password" ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -965,20 +1001,30 @@ function StaffFormFields({
 
           <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
             <span className="w-2 h-2 bg-purple-600 rounded-full" />
-            <span className="text-xs font-semibold text-purple-700 uppercase tracking-wide">Homeroom Class (Attendance Only)</span>
+            <span className="text-xs font-semibold text-purple-700 uppercase tracking-wide">
+              {teacherType === "class_teacher" ? "Homeroom Class (one class or none)" : "Classes Teaching (select all applicable)"}
+            </span>
           </div>
-          {teacherType === "subject_teacher" ? (
-            <p className="text-sm text-gray-500 italic bg-blue-50 border border-blue-100 px-4 py-3">
-              Subject teachers are not assigned to a specific class.
-            </p>
+          {teacherType === "class_teacher" ? (
+            <select
+              value={classesValue.trim()}
+              onChange={(e) => setValue("classesRaw", e.target.value)}
+              disabled={submitting}
+              className="w-full h-10 px-3 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="">— No class assigned —</option>
+              {SCHOOL_GRADES.map((grade) => (
+                <option key={grade} value={grade}>{grade}</option>
+              ))}
+            </select>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {SCHOOL_GRADES.map((grade) => (
                 <label key={grade} className={cn(
                   "flex items-center gap-2 px-3 py-2 border cursor-pointer text-sm transition-colors",
-                  selectedClasses.includes(grade) ? "bg-purple-50 border-purple-300 text-purple-700" : "border-gray-200 text-gray-600 hover:border-purple-200"
+                  selectedClasses.includes(grade) ? "bg-blue-50 border-blue-300 text-blue-700" : "border-gray-200 text-gray-600 hover:border-blue-200"
                 )}>
-                  <input type="checkbox" checked={selectedClasses.includes(grade)} onChange={() => toggleClass(grade)} disabled={submitting} className="w-3.5 h-3.5 accent-purple-600" />
+                  <input type="checkbox" checked={selectedClasses.includes(grade)} onChange={() => toggleClass(grade)} disabled={submitting} className="w-3.5 h-3.5 accent-blue-600" />
                   {grade}
                 </label>
               ))}
