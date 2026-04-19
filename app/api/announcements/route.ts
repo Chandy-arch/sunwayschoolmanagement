@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import connectDB from "@/lib/db";
-import AnnouncementModel from "@/models/Announcement";
+import AnnouncementModel, { IAnnouncement } from "@/models/Announcement";
+import type { Types } from "mongoose";
 
 // GET /api/announcements — list announcements filtered by role
 export async function GET(req: NextRequest) {
@@ -30,7 +31,7 @@ export async function GET(req: NextRequest) {
     const announcements = await AnnouncementModel.find(filter)
       .sort({ createdAt: -1 })
       .limit(limit)
-      .lean();
+      .lean<(IAnnouncement & { _id: Types.ObjectId; createdAt: Date; updatedAt: Date })[]>();
 
     return NextResponse.json({
       success: true,

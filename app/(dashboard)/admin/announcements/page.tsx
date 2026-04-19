@@ -40,7 +40,7 @@ const audienceConfig: Record<string, { label: string; icon: typeof Users; color:
   both:   { label: "Everyone",    icon: Bell,     color: "text-indigo-600 bg-indigo-50 border-indigo-200" },
 };
 
-const emptyForm = { title: "", content: "", priority: "medium" as const, targetAudience: "both" as const, expiresAt: "" };
+const emptyForm = { title: "", content: "", priority: "medium" as Announcement["priority"], targetAudience: "both" as Announcement["targetAudience"], expiresAt: "" };
 
 export default function AdminAnnouncementsPage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);

@@ -5,8 +5,9 @@ import connectDB from "@/lib/db";
 import AnnouncementModel from "@/models/Announcement";
 
 // PUT /api/announcements/[id] — update (admin only)
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || (session.user as { role?: string }).role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -18,7 +19,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const { title, content, priority, targetAudience, expiresAt } = body;
 
     const updated = await AnnouncementModel.findByIdAndUpdate(
-      params.id,
+      id,
       {
         ...(title && { title: title.trim() }),
         ...(content && { content: content.trim() }),
@@ -41,8 +42,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 // DELETE /api/announcements/[id] — soft delete (admin only)
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     if (!session || (session.user as { role?: string }).role !== "admin") {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
@@ -50,7 +52,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
 
     await connectDB();
 
-    await AnnouncementModel.findByIdAndUpdate(params.id, { isActive: false });
+    await AnnouncementModel.findByIdAndUpdate(id, { isActive: false });
 
     return NextResponse.json({ success: true, message: "Announcement deleted" });
   } catch (error) {
